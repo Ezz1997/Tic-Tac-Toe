@@ -56,6 +56,8 @@ function newGame(player1, player2){
         if (!board[boardIndex]) {
             board[boardIndex] = turn === TURN.PLAYER1 ? player1Action : player2Action;
             toggleTurn();
+        }else{
+            return;
         }
 
         let res = checkForWinner(player1Action, player2Action);
