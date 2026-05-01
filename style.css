@@ -1,0 +1,26 @@
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    background-color: bisque;
+}
+
+.container{
+    display: grid;
+    grid-template-rows: 1fr 10fr;
+    height: 600px;
+    width: 600px;
+    background-color: rgb(99, 121, 139);
+    padding: 8px;
+}
+
+#game-board{
+    background-color: aquamarine;
+}
+
+#title{
+    justify-self: center;
+}
