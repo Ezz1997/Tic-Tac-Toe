@@ -37,6 +37,10 @@ function newGame(player1, player2){
         return gameState;
     }
 
+    const getCurrentTurn = () => {
+        return turn;
+    }
+
     const reset = () => {
         board = new Array(9);
         gameResult = "";
@@ -137,7 +141,7 @@ function newGame(player1, player2){
         return GAME_RESULT.DRAW;
     }
 
-    return {reset, play, getGameResult, getGameState, getWinner};
+    return {reset, play, getGameResult, getGameState, getWinner, getCurrentTurn};
 };
 
 function player(name) {
