@@ -15,7 +15,7 @@ const GAME_STATE = Object.freeze({
     OVER: "OVER"
 });
 
-function newGame(player1, player2){
+function newGame(player1, player2) {
     let board = new Array(9);
     this.player1 = player1;
     let player1Action = "X";
@@ -24,6 +24,10 @@ function newGame(player1, player2){
     let gameResult = "";
     let turn = Object.values(TURN)[Math.floor(Math.random() * Object.values(TURN).length)];
     let gameState = GAME_STATE.IDLE;
+
+    function getGameboard() {
+        return board;
+    }
 
     const getWinner = () => {
         return gameResult === GAME_RESULT.PLAYER1_WINS ? this.player1.getPlayerName() : this.player2.getPlayerName();
@@ -49,8 +53,10 @@ function newGame(player1, player2){
     };
 
     function play(boardIndex) {
-        if(gameState === GAME_STATE.OVER){
-            return;
+        let isPlaying = false;
+
+        if (gameState === GAME_STATE.OVER) {
+            return false;
         }
 
         if (gameState === GAME_STATE.IDLE) {
@@ -59,17 +65,25 @@ function newGame(player1, player2){
 
         if (!board[boardIndex]) {
             board[boardIndex] = turn === TURN.PLAYER1 ? player1Action : player2Action;
+
             toggleTurn();
-        }else{
-            return;
+            isPlaying = true;
+        } else {
+            isPlaying = false;
         }
 
-        let res = checkForWinner(player1Action, player2Action);
-        if(res !== GAME_STATE.ONGOING){
-            gameResult = res; 
-            gameState = GAME_STATE.OVER;
+        if (isPlaying) {
+            let gameRes = checkForWinner(player1Action, player2Action);
+            console.log(gameRes);
+
+            if(Object.values(GAME_RESULT).includes(gameRes)){
+                console.log("Game Over!");
+                gameState = GAME_STATE.OVER;
+                gameResult = gameRes;
+            }
         }
-        console.log(res);
+
+        return isPlaying;
     }
 
     function toggleTurn() {
@@ -141,7 +155,7 @@ function newGame(player1, player2){
         return GAME_RESULT.DRAW;
     }
 
-    return {reset, play, getGameResult, getGameState, getWinner, getCurrentTurn};
+    return { reset, play, getGameResult, getGameState, getWinner, getCurrentTurn, getGameboard };
 };
 
 function player(name) {
@@ -162,3 +176,44 @@ function player(name) {
 
     return { increaseScore, getScore, getPlayerName };
 }
+
+function initGameBoard() {
+    const gameBoardDiv = document.getElementById("game-board");
+    const game = newGame(player("Jack"), player("Daria"));
+
+    for (let i = 0; i < 9; i++) {
+        const gameCellDiv = document.createElement("div");
+        gameCellDiv.classList.add("board-cell");
+        gameCellDiv.id = i;
+        gameCellDiv.addEventListener("click", (e) => {
+            if(game.getGameState() === GAME_STATE.OVER){
+                console.log(`Game Result: ${game.getGameResult()}`);
+                return;
+            }
+
+            console.log("you shall pass");
+
+            let curPos = e.target.closest(".board-cell").id;
+            let curTurn = game.getCurrentTurn();
+            let isNewCell = game.play(curPos);
+
+            if (isNewCell) {
+                let action = "";
+
+                if (curTurn === TURN.PLAYER1) {
+                    action = "X";
+                } else {
+                    action = "O";
+                }
+
+                const img = document.createElement("img");
+                img.src = `./assests/${action.toLowerCase()}.png`;
+                img.style = "height: 150px; width: auto;";
+                gameCellDiv.append(img);
+            }
+        })
+        gameBoardDiv.append(gameCellDiv);
+    }
+}
+
+initGameBoard();
