@@ -207,7 +207,7 @@ function initGameBoard() {
                 }
 
                 const img = document.createElement("img");
-                img.src = `./assests/${action.toLowerCase()}.png`;
+                img.src = `./assests/${action}.png`;
                 img.style = "height: 150px; width: auto;";
                 gameCellDiv.append(img);
             }
