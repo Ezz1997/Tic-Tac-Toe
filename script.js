@@ -15,11 +15,11 @@ const GAME_STATE = Object.freeze({
     OVER: "OVER"
 });
 
-function newGame(player1, player2) {
+const newGame = (function () {
     let board = new Array(9);
-    this.player1 = player1;
+    let player1 = player("Jack");
     let player1Action = "X";
-    this.player2 = player2;
+    let player2 = player("dempsey");
     let player2Action = "O";
     let gameResult = "";
     let turn = Object.values(TURN)[Math.floor(Math.random() * Object.values(TURN).length)];
@@ -76,10 +76,24 @@ function newGame(player1, player2) {
             let gameRes = checkForWinner(player1Action, player2Action);
             console.log(gameRes);
 
-            if(Object.values(GAME_RESULT).includes(gameRes)){
-                console.log("Game Over!");
+            if (Object.values(GAME_RESULT).includes(gameRes)) {
+                const gameResultPopup = document.getElementById("game-result-popup");
                 gameState = GAME_STATE.OVER;
                 gameResult = gameRes;
+                let textResult = "";
+
+                if (gameResult === GAME_RESULT.PLAYER1_WINS) {
+                    textResult = `${player1.getPlayerName()} Wins!`;
+                } else if (gameResult === GAME_RESULT.PLAYER2_WINS) {
+                    textResult = `${player2.getPlayerName()} Wins!`;
+
+                } else {
+                    textResult = "Draw!";
+                }
+
+                gameResultPopup.textContent = textResult;
+                gameResultPopup.style.display = "block";
+                gameResultPopup.style.color = "#7DE2D1";
             }
         }
 
@@ -156,7 +170,7 @@ function newGame(player1, player2) {
     }
 
     return { reset, play, getGameResult, getGameState, getWinner, getCurrentTurn, getGameboard };
-};
+})();
 
 function player(name) {
     let playerName = name;
@@ -179,23 +193,24 @@ function player(name) {
 
 function initGameBoard() {
     const gameBoardDiv = document.getElementById("game-board");
-    const game = newGame(player("Jack"), player("Daria"));
 
     for (let i = 0; i < 9; i++) {
         const gameCellDiv = document.createElement("div");
-        gameCellDiv.classList.add("board-cell");
+        gameCellDiv.classList.add("cell");
         gameCellDiv.id = i;
         gameCellDiv.addEventListener("click", (e) => {
-            if(game.getGameState() === GAME_STATE.OVER){
-                console.log(`Game Result: ${game.getGameResult()}`);
+            if (newGame.getGameState() === GAME_STATE.OVER) {
+                console.log(`Game Result: ${newGame.getGameResult()}`);
                 return;
             }
 
+            gameCellDiv.classList.add("filled");
+
             console.log("you shall pass");
 
-            let curPos = e.target.closest(".board-cell").id;
-            let curTurn = game.getCurrentTurn();
-            let isNewCell = game.play(curPos);
+            let curPos = e.target.closest(".cell").id;
+            let curTurn = newGame.getCurrentTurn();
+            let isNewCell = newGame.play(curPos);
 
             if (isNewCell) {
                 let action = "";
@@ -208,7 +223,7 @@ function initGameBoard() {
 
                 const img = document.createElement("img");
                 img.src = `./assests/${action}.png`;
-                img.style = "height: 150px; width: auto;";
+                img.classList.add("token");
                 gameCellDiv.append(img);
             }
         })
