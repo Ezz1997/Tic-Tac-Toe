@@ -6,7 +6,7 @@ body {
     margin: 0;
     padding: 0;
     height: 100vh;
-    background-color: bisque;
+    background-color: #1B1B2F;
 }
 
 .container {
@@ -14,7 +14,6 @@ body {
     grid-template-rows: 1fr 10fr;
     height: 600px;
     width: 600px;
-    background-color: rgb(99, 121, 139);
     padding: 8px;
 }
 
@@ -22,12 +21,14 @@ body {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
-    background-color: aquamarine;
     gap: 4px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    background-color: #22223B;
 }
 
 #title {
     justify-self: center;
+    color: #F2E9E4;
 }
 
 .attribution {
@@ -35,13 +36,33 @@ body {
     opacity: 0.6;
     text-align: center;
     margin-bottom: 8px;
+    color: #F5F5F5;
 }
 
-.board-cell {
+.cell {
     display: grid;
     justify-content: center;
     align-items: center;
-    background-color: white;
+    background-color: #2B2D52;
     height: auto;
     width: auto;
+}
+
+.token {
+    height: 130px;
+    width: auto;
+}
+
+.fontdiner-swanky-regular {
+    font-family: "Fontdiner Swanky", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+#game-result-popup {
+    display: none;
+    position: fixed;
+    top: 5%;
+    justify-self: center;
+    color: #f2e9e4;
 }
