@@ -191,8 +191,25 @@ function player(name) {
     return { increaseScore, getScore, getPlayerName };
 }
 
+function resetGame() {
+    const tokens = document.querySelectorAll(".token");
+    const gameResult = document.getElementById("game-result-popup");
+    gameResult.innerText = "";
+
+    for (let token of tokens) {
+        console.log(token);
+        token.remove();
+    }
+
+    newGame.reset();
+}
+
 function initGameBoard() {
     const gameBoardDiv = document.getElementById("game-board");
+    const restartBtn = document.getElementById("restart-btn");
+    restartBtn.addEventListener("click", (event) => {
+        resetGame();
+    })
 
     for (let i = 0; i < 9; i++) {
         const gameCellDiv = document.createElement("div");
