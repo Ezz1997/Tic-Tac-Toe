@@ -197,8 +197,9 @@ function resetGame() {
     gameResult.innerText = "";
 
     for (let token of tokens) {
-        console.log(token);
-        token.remove();
+        if(!token.parentNode.classList.toString().includes('player')){
+            token.remove();
+        }
     }
 
     newGame.reset();
