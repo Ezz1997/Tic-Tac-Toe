@@ -92,7 +92,7 @@ body {
     flex-direction: column;
     gap: 32px;
     justify-self: center;
-    padding: 8px;
+    padding: 16px;
 }
 
 #player1-name,
