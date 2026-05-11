@@ -92,4 +92,24 @@ body {
     flex-direction: column;
     gap: 32px;
     justify-self: center;
+    padding: 8px;
+}
+
+#player1-name,
+#player2-name {
+    width: 150px;
+    outline: none;
+    border: none;
+    border-radius: 10px;
+    height: 25px;
+    padding: 5px;
+    background-color: #F2E9E4;
+}
+
+.player>img {
+    transition: transform 0.8s ease-in-out;
+}
+
+.player>img:hover {
+    transform: rotate(360deg);
 }
