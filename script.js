@@ -17,9 +17,9 @@ const GAME_STATE = Object.freeze({
 
 const newGame = (function () {
     let board = new Array(9);
-    let player1 = player("Jack");
+    let player1 = player("X");
     let player1Action = "X";
-    let player2 = player("dempsey");
+    let player2 = player("O");
     let player2Action = "O";
     let gameResult = "";
     let turn = Object.values(TURN)[Math.floor(Math.random() * Object.values(TURN).length)];
@@ -43,6 +43,20 @@ const newGame = (function () {
 
     const getCurrentTurn = () => {
         return turn;
+    }
+
+    const setPlayer1 = (name) => {
+        if (name) {
+            player1 = player(name);
+
+        }
+    }
+
+    const setPlayer2 = (name) => {
+        if (name) {
+            player2 = player(name);
+
+        }
     }
 
     const reset = () => {
@@ -169,7 +183,7 @@ const newGame = (function () {
         return GAME_RESULT.DRAW;
     }
 
-    return { reset, play, getGameResult, getGameState, getWinner, getCurrentTurn, getGameboard };
+    return { reset, play, getGameResult, getGameState, getWinner, getCurrentTurn, getGameboard, setPlayer1, setPlayer2 };
 })();
 
 function player(name) {
@@ -197,20 +211,48 @@ function resetGame() {
     gameResult.innerText = "";
 
     for (let token of tokens) {
-        if(!token.parentNode.classList.toString().includes('player')){
+        if (!token.parentNode.classList.toString().includes('player')) {
             token.remove();
         }
     }
 
     newGame.reset();
+    togglePlayerBoxShadow(newGame.getCurrentTurn());
+}
+
+function togglePlayerBoxShadow(curTurn) {
+
+    const player1Container = document.getElementById("player1");
+    const player2Container = document.getElementById("player2");
+
+    if (curTurn === TURN.PLAYER1) {
+        player1Container.style.boxShadow = "#C6A15B 0 10px";
+        player2Container.style.boxShadow = "none";
+    } else {
+        player2Container.style.boxShadow = "#C6A15B 0 10px";
+        player1Container.style.boxShadow = "none";
+    }
 }
 
 function initGameBoard() {
     const gameBoardDiv = document.getElementById("game-board");
     const restartBtn = document.getElementById("restart-btn");
+    const player1Name = document.getElementById("player1-name");
+    const player2Name = document.getElementById("player2-name");
+
+    togglePlayerBoxShadow(newGame.getCurrentTurn());
+
+    player1Name.addEventListener("focusout", (event) => {
+        newGame.setPlayer1(player1Name.value);
+    });
+
+    player2Name.addEventListener("focusout", (event) => {
+        newGame.setPlayer2(player2Name.value);
+    });
+
     restartBtn.addEventListener("click", (event) => {
         resetGame();
-    })
+    });
 
     for (let i = 0; i < 9; i++) {
         const gameCellDiv = document.createElement("div");
@@ -231,6 +273,8 @@ function initGameBoard() {
             let isNewCell = newGame.play(curPos);
 
             if (isNewCell) {
+                togglePlayerBoxShadow(newGame.getCurrentTurn());
+
                 let action = "";
 
                 if (curTurn === TURN.PLAYER1) {
