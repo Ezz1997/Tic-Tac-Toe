@@ -66,7 +66,7 @@ body {
 #game-result-popup {
     display: none;
     position: fixed;
-    top: 5%;
+    top: 1%;
     justify-self: center;
     color: #f2e9e4;
 }
